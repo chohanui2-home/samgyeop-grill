@@ -493,7 +493,11 @@ button{font-family:inherit;cursor:pointer}
     'M148 58C160 54 168 60 180 56', 'M196 62C204 59 210 62 216 59'
   ];
   var MARKS = [[66, 20, 56, 68], [96, 17, 86, 70], [126, 15, 116, 71], [156, 14, 146, 70], [186, 15, 176, 70]];
-  var CHAR_SPOTS = [[60, 34, 7], [104, 56, 6], [150, 30, 8], [196, 50, 6], [82, 50, 5], [172, 58, 5]];
+  var CHAR_SPOTS = [
+    [58, 33, 4.2, 3.0, -18], [96, 55, 3.4, 2.4, 12], [136, 29, 4.6, 3.2, -8],
+    [176, 54, 3.6, 2.6, 20], [76, 61, 3.0, 2.2, -30], [160, 37, 2.8, 2.2, 6],
+    [116, 62, 3.2, 2.4, -14], [198, 41, 3.4, 2.4, 18]
+  ];
   var PIECE_X = [28, 79, 130, 181];
 
   function $(id) { return document.getElementById(id); }
@@ -781,9 +785,10 @@ button{font-family:inherit;cursor:pointer}
       out.push('<path d="M' + MARKS[i][0] + ' ' + MARKS[i][1] + 'L' + MARKS[i][2] + ' ' + MARKS[i][3] + '"/>');
     }
     out.push('</g>');
-    out.push('<g class="chars" fill="#221812" opacity="0">');
+    out.push('<g class="chars" fill="#2a1c12" opacity="0">');
     for (i = 0; i < CHAR_SPOTS.length; i++) {
-      out.push('<circle cx="' + CHAR_SPOTS[i][0] + '" cy="' + CHAR_SPOTS[i][1] + '" r="' + CHAR_SPOTS[i][2] + '"/>');
+      out.push('<ellipse cx="' + CHAR_SPOTS[i][0] + '" cy="' + CHAR_SPOTS[i][1] + '" rx="' + CHAR_SPOTS[i][2]
+        + '" ry="' + CHAR_SPOTS[i][3] + '" transform="rotate(' + CHAR_SPOTS[i][4] + ' ' + CHAR_SPOTS[i][0] + ' ' + CHAR_SPOTS[i][1] + ')"/>');
     }
     out.push('</g>');
     out.push('<ellipse class="juice" cx="72" cy="33" rx="36" ry="11" fill="url(#' + gid + 'j)"/>');
@@ -873,7 +878,7 @@ button{font-family:inherit;cursor:pointer}
         c.crust.style.opacity = (clamp((p - 0.72) / 0.55, 0, 1) * (m.flipped ? 0.5 : 0.34)).toFixed(2);
       }
       if (c.marks) { c.marks.style.opacity = (m.flipped ? 0.42 : 0.10).toFixed(2); }
-      if (c.chars) { c.chars.style.opacity = clamp((p - 1.12) / 0.55, 0, 0.62).toFixed(2); }
+      if (c.chars) { c.chars.style.opacity = clamp((p - 1.20) / 0.55, 0, 0.52).toFixed(2); }
       if (c.juice) { c.juice.style.opacity = clamp(0.5 - p * 0.42, 0, 0.5).toFixed(2); }
       for (k = 0; k < c.pieces.length; k++) { c.pieces[k].setAttribute('fill', col); }
       if (c.bar) {
