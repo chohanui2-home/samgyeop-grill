@@ -89,7 +89,7 @@ button{font-family:inherit;cursor:pointer}
 .grillHead #levelTag{color:#9a6a24}
 .grillHead #goalTag{color:#c2451f;background:#fff1d6;border:1.5px solid #ffd79a;border-radius:99px;padding:2px 8px}
 .grill{
-  position:relative;border-radius:24px;padding:9px 9px 10px;
+  position:relative;border-radius:24px;padding:9px 9px 10px;flex:1 1 auto;display:flex;flex-direction:column;min-height:0;
   background:linear-gradient(180deg,#3b2f27 0%,#2a221e 52%,#1d1713 100%);
   box-shadow:inset 0 2px 0 rgba(255,210,150,.10),0 14px 26px rgba(70,40,10,.30),0 2px 0 #4a3a2e;
   border:2px solid #1a1411;
@@ -103,7 +103,11 @@ button{font-family:inherit;cursor:pointer}
   content:"";position:absolute;inset:0;border-radius:22px;pointer-events:none;
   box-shadow:inset 0 0 30px rgba(0,0,0,.55);
 }
-.slots{position:relative;z-index:1;display:grid;gap:7px}
+.slots{position:relative;z-index:1;display:grid;gap:7px;flex:1 1 auto;grid-auto-rows:minmax(0,1fr)}
+.slots.n1 .slot{min-height:150px}
+.slots.n2 .slot{min-height:118px}
+.slots.n3 .slot{min-height:104px}
+.slots.n4 .slot{min-height:94px}
 .slot{
   position:relative;border-radius:15px;overflow:hidden;min-height:74px;
   border:1.5px solid rgba(255,190,120,.16);
@@ -242,7 +246,10 @@ button{font-family:inherit;cursor:pointer}
 @media (max-height:730px){
   .mascot.flame{width:44px;height:50px}
   .mascot.friend{width:42px;height:48px}
-  .slot{min-height:64px}
+  .slots.n1 .slot{min-height:100px}
+  .slots.n2 .slot{min-height:86px}
+  .slots.n3 .slot{min-height:74px}
+  .slots.n4 .slot{min-height:68px}
   .cutBtn{padding:11px 8px;font-size:16px}
   .bubble{font-size:11.5px;padding:5px 8px;min-height:28px}
 }
@@ -825,6 +832,7 @@ button{font-family:inherit;cursor:pointer}
     var box = $('slots'), i, el;
     if (!box) { return; }
     box.innerHTML = '';
+    box.className = 'slots n' + S.slots.length;
     box.style.gridTemplateColumns = S.slots.length <= 3 ? '1fr' : '1fr 1fr';
     for (i = 0; i < S.slots.length; i++) {
       el = document.createElement('div');
@@ -838,10 +846,6 @@ button{font-family:inherit;cursor:pointer}
       })(i));
       box.appendChild(el);
       S.slots[i].el = el;
-    }
-    var h = S.slots.length <= 2 ? 96 : (S.slots.length === 3 ? 84 : 82);
-    for (i = 0; i < S.slots.length; i++) {
-      if (S.slots[i].el) { S.slots[i].el.style.minHeight = h + 'px'; }
     }
   }
 
