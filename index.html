@@ -67,15 +67,14 @@ button{font-family:inherit;cursor:pointer}
 .stageRow{display:flex;align-items:flex-end;gap:3px;margin:0 0 5px}
 .bubble{
   flex:1 1 auto;min-width:0;position:relative;background:#fffdf7;border:2px solid #ffe0ad;
-  border-radius:13px;padding:6px 9px;font-size:12px;font-weight:800;line-height:1.3;
+  border-radius:13px;padding:7px 10px;font-size:12px;font-weight:800;line-height:1.34;
   color:#8a5410;letter-spacing:-.035em;box-shadow:0 4px 10px rgba(190,140,60,.14);
-  margin:0 0 6px 0;min-height:32px;display:flex;align-items:center;
+  margin:0 0 6px 0;min-height:32px;
 }
-.bubble::after,.bubble::before{
-  content:"";position:absolute;width:9px;height:9px;background:#fffdf7;transform:rotate(45deg);
+.bubble::after{
+  content:"";position:absolute;right:-6px;bottom:11px;width:9px;height:9px;background:#fffdf7;
+  transform:rotate(45deg);border-right:2px solid #ffe0ad;border-top:2px solid #ffe0ad;
 }
-.bubble::before{right:-6px;bottom:11px;border-right:2px solid #ffe0ad;border-top:2px solid #ffe0ad}
-.bubble::after{left:-6px;bottom:11px;border-left:2px solid #ffe0ad;border-bottom:2px solid #ffe0ad}
 .mascot{flex:0 0 auto;display:block;overflow:visible}
 .mascot.flame{width:52px;height:58px}
 .mascot.friend{width:50px;height:56px;margin-bottom:3px}
@@ -176,6 +175,7 @@ button{font-family:inherit;cursor:pointer}
   box-shadow:0 6px 0 #b5670d,0 10px 20px rgba(200,130,20,.32);
   transition:transform .08s ease,box-shadow .08s ease;
 }
+.cutBtn svg{width:19px;height:19px;display:inline-block;vertical-align:-3px;margin-right:3px}
 .cutBtn:active{transform:translateY(3px);box-shadow:0 3px 0 #b5670d,0 6px 12px rgba(200,130,20,.28)}
 .cutBtn[disabled]{opacity:.5}
 .cutBtn small{display:block;font-size:10.5px;font-weight:800;letter-spacing:-.02em;opacity:.72;margin-top:1px}
@@ -379,7 +379,7 @@ button{font-family:inherit;cursor:pointer}
     <div class="startMask" id="startMask" hidden><b>탭해서 시작!</b><span>고기가 타기 전에 톡!</span></div>
   </div>
 
-  <button id="cutBtn" class="cutBtn" type="button">✂️ 싹둑 자르기!<small id="cutSub">고기를 두 번 탭해도 잘라져요</small></button>
+  <button id="cutBtn" class="cutBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.4 3.6l9.2 13.6"/><path d="M17.6 3.6L8.4 17.2"/><circle cx="5.4" cy="19.2" r="2.6"/><circle cx="18.6" cy="19.2" r="2.6"/></svg><span>싹둑 자르기!</span><small id="cutSub">고기를 두 번 탭해도 잘라져요</small></button>
 
   <div class="legend">
     <i style="background:#f7a3b4"></i>생고기
@@ -469,7 +469,7 @@ button{font-family:inherit;cursor:pointer}
       tip: '대패는 빨리, 목살은 느리게 익어요. 두께를 보고 순서를 정하세요!' },
     { id: 5, name: '5단계', label: '손님 취향!', tab: '취향', slots: 3, target: 8, speed: 1.04,
       kinds: ['samgyeop'], orders: true, time: null,
-      tip: '말풍선 주문대로! 촉촉 미디엄과 바싹 웰던의 굽기 정도가 달라요.' },
+      tip: '말풍선 주문대로! 촉촉 미디엄은 노릇하게, 바싹 웰던은 더 바싹!' },
     { id: 6, name: '6단계', label: '불판왕 45초!', tab: '45초', slots: 4, target: 0, speed: 1.10,
       kinds: ['daepae', 'samgyeop', 'moksal'], orders: false, time: 45000,
       tip: '45초 타임어택! 완벽한 접시를 최대한 많이 서빙하세요.' }
@@ -590,9 +590,9 @@ button{font-family:inherit;cursor:pointer}
       return 0;
     }
     var t = def.target;
-    if (score >= t * 110) { return 3; }
-    if (score >= t * 72) { return 2; }
-    if (score >= t * 40) { return 1; }
+    if (score >= t * 105) { return 3; }
+    if (score >= t * 62) { return 2; }
+    if (score >= t * 30) { return 1; }
     return 0;
   }
   function gradeFor(stars) {
@@ -1263,7 +1263,7 @@ button{font-family:inherit;cursor:pointer}
     S.orderFlip = false;
     S.slots = [];
     for (i = 0; i < def.slots; i++) {
-      S.slots.push({ i: i, meat: null, refillIn: i === 0 ? 0 : 300 * i, el: null });
+      S.slots.push({ i: i, meat: null, refillIn: 0, el: null });
     }
     save.lastLevel = def.id;
     writeStore();
@@ -1324,8 +1324,8 @@ button{font-family:inherit;cursor:pointer}
       $('rBest').className = 'resBest';
     }
     out = [];
-    out.push('<div class="rRow"><i>🍽</i><span class="nm">서빙한 접시</span><span class="er">' +
-      (S.def.time ? '' : S.target + '접시 중 ') + '</span><span class="pt">' + S.plates + '접시</span></div>');
+    out.push('<div class="rRow"><i>🍽</i><span class="nm">서빙한 접시</span><span class="er"></span><span class="pt">' +
+      S.plates + '접시</span></div>');
     out.push('<div class="rRow"><i>✨</i><span class="nm">완벽한 접시</span><span class="er"></span><span class="pt">' + S.perfect + '</span></div>');
     out.push('<div class="rRow"><i>🔥</i><span class="nm">최고 콤보</span><span class="er"></span><span class="pt">x' + S.maxCombo + '</span></div>');
     out.push('<div class="rRow"><i>💨</i><span class="nm">탄 고기</span><span class="er"></span><span class="pt">' + S.burnt + '</span></div>');
